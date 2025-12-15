@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { PropType } from 'vue'
+import type { PropType } from 'vue'
 
 // items: Array of { ch: single character, hex: 6-digit HEX without # }
-const props = defineProps({
+defineProps({
   items: {
     type: Array as PropType<Array<{ ch: string; hex: string }>>,
     required: true,
@@ -45,4 +45,3 @@ const props = defineProps({
 }
 .code { color: #64748b; }
 </style>
-
