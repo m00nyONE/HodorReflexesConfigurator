@@ -31,12 +31,19 @@ const customNameColored = ref('|cFF5733m00ny|r')
 
     <!-- Pass current values to CodeGenerator so changes reflect immediately -->
     <CodeGenerator
-      :enable-name="enableName"
-      :enable-static="enableStatic"
-      :enable-animated="enableAnimated"
       :user-name="userName"
+
+      :enable-name="enableName"
       :custom-name="customName"
       :custom-name-colored="customNameColored"
+
+      :enable-static="enableStatic"
+
+      :enable-animated="enableAnimated"
+      :animationWidth=0
+      :animationHeight=0
+      :animationFPS=0
+
     />
   </main>
 </template>

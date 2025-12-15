@@ -3,23 +3,40 @@ import { computed, ref } from 'vue'
 
 const props = defineProps<{
   userName: string
+
+  enableName?: boolean
   customName?: string
   customNameColored?: string
 
-  enableName?: boolean
   enableStatic?: boolean
+
   enableAnimated?: boolean
+  animationWidth?: number
+  animationHeight?: number
+  animationFPS?: number
 }>()
+
+const basePath = 'LibCustomIcons/icons/'
+const currentFolder = `misc${new Date().getFullYear() - 2018}` // auto-update each year
+
+const errNoUserName = '-- Enter a username to generate code.'
+const errInvalidUserName = '-- INVALID USERNAME: username must start with "@" symbol.'
 
 // Default fallbacks for optional props
 const enableName = computed(() => props.enableName ?? true)
-const enableStatic = computed(() => props.enableStatic ?? false)
-const enableAnimated = computed(() => props.enableAnimated ?? false)
-const currentFolder = 'misc7' // Placeholder folder, can be made dynamic later
+const enableStatic = computed(() => props.enableStatic ?? true)
+const enableAnimated = computed(() => props.enableAnimated ?? true)
+const animationWidth = computed(() => props.animationWidth ?? 0)
+const animationHeight = computed(() => props.animationHeight ?? 0)
+const animationFPS = computed(() => props.animationFPS ?? 0)
+
 
 // Helper to escape special characters in usernames for file paths
-function escapeName(name: string): string {
-  return name.replace(/^@/g, '').replace(/[^\w-]/g, '')
+function genFileName(name: string, animated: boolean = false): string {
+  return name.replace(/^@/g, '').replace(/[^\w-]/g, '') + (animated ? '_anim' : '') + '.dds'
+}
+function genFolderName(): string {
+  return basePath + currentFolder
 }
 
 // Helpers to generate individual lines
@@ -28,33 +45,41 @@ function genName(userName: string, customName?: string, customNameColored?: stri
   return `n["${userName}"] = {"${customName}", "${customNameColored}"}`
 }
 
-function genStatic(userName: string, folder: string): string | null {
+function genStatic(userName: string): string | null {
   if (!userName) return null
-  return `s["${userName}"] = "LibCustomIcons/icons/${folder}/${escapeName(userName)}.dds"`
+  return `s["${userName}"] = "${genFolderName()}/${genFileName(userName, false)}"`
 }
 
-function genAnimated(userName: string, folder: string): string | null {
+function genAnimated(userName: string, width: number = 0, height: number = 0, fps: number = 0): string | null {
   if (!userName) return null
-  return `a["${userName}"] = {"LibCustomIcons/icons/${folder}/${escapeName(userName)}_anim.dds", 0, 0, 0}`
+  return `a["${userName}"] = {"${genFolderName()}/${genFileName(userName, true)}", ${width}, ${height}, ${fps}}`
 }
 
 const luaCode = computed(() => {
   const lines: string[] = []
+  if (!props.userName) {
+    return errNoUserName
+  }
+  if (!props.userName.startsWith('@')) {
+    return errInvalidUserName
+  }
+
   // opening code block
   lines.push('```')
   // name
   if (enableName.value) {
     const line = genName(props.userName, props.customName, props.customNameColored)
     if (line) lines.push(line)
+    lines.push('')
   }
   // static
   if (enableStatic.value) {
-    const line = genStatic(props.userName, currentFolder)
+    const line = genStatic(props.userName)
     if (line) lines.push(line)
   }
   // animated
   if (enableAnimated.value) {
-    const line = genAnimated(props.userName, currentFolder)
+    const line = genAnimated(props.userName, animationWidth.value, animationHeight.value, animationFPS.value)
     if (line) lines.push(line)
   }
   // closing code block
@@ -85,10 +110,6 @@ async function copyToClipboard() {
 
 <template>
   <div class="codegen">
-    <div class="header">
-      <span>Lua Code</span>
-    </div>
-
     <div class="code-wrap">
       <div class="copy-container">
         <button
@@ -174,10 +195,6 @@ async function copyToClipboard() {
   white-space: pre-wrap;
   overflow: auto;
 }
-.hint {
-  color: #64748b; /* slate-500 */
-  font-size: 12px;
-}
 .toast {
   position: fixed;
   right: 16px;
@@ -190,6 +207,4 @@ async function copyToClipboard() {
   box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   z-index: 1000;
 }
-:deep(.fade-enter-active), :deep(.fade-leave-active) { transition: opacity .15s ease, transform .15s ease; }
-:deep(.fade-enter-from), :deep(.fade-leave-to) { opacity: 0; transform: translateY(4px); }
 </style>
