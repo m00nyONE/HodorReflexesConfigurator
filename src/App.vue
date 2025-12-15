@@ -1,47 +1,46 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref } from 'vue'
+import CodeGen from '@/components/CodeGen.vue'
+import Inputs from '@/components/Inputs.vue'
+import NameConfigurator from '@/components/NameConfigurator.vue'
+
+// Shared state between Inputs and CodeGen
+const userName = ref('@m00nyONE')
+const customName = ref('m00ny')
+
+// Toggles can be adjusted here or wired to UI later
+const enableName = ref(true)
+const enableStatic = ref(true)
+const enableAnimated = ref(true)
+
+// Colored name is controlled via NameConfigurator (v-model)
+const customNameColored = ref('|cFF5733m00ny|r')
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
   <main>
-    <TheWelcome />
+    <!-- Two-way bind Inputs to shared state -->
+    <Inputs v-model:userName="userName" v-model:customName="customName" />
+
+    <!-- Configure colored custom name; keeps in sync via v-model -->
+    <NameConfigurator
+      :user-name="userName"
+      :custom-name="customName"
+      v-model="customNameColored"
+    />
+
+    <!-- Pass current values to CodeGen so changes reflect immediately -->
+    <CodeGen
+      :enable-name="enableName"
+      :enable-static="enableStatic"
+      :enable-animated="enableAnimated"
+      :user-name="userName"
+      :custom-name="customName"
+      :custom-name-colored="customNameColored"
+    />
   </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
+/* ...existing styles... */
 </style>
