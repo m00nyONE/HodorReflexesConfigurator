@@ -110,10 +110,6 @@ async function copyToClipboard() {
       <pre class="box"><code>{{ luaCode }}</code></pre>
     </div>
 
-    <p class="hint">
-      Aktivierte Teile: {{ enableName ? 'name ' : '' }}{{ enableStatic ? 'static ' : '' }}{{ enableAnimated ? 'animated' : '' }}
-    </p>
-
     <transition name="fade">
       <div v-show="copied" class="toast" role="status" aria-live="polite">
         copied to clipboard!

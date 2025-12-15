@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import Preview from '@/components/Preview.vue'
+import PreviewGenerator from '@/components/PreviewGenerator.vue'
 
 const props = defineProps<{
   userName?: string
@@ -107,7 +107,7 @@ watch(colored, (val) => emit('update:modelValue', val), { immediate: true })
 <template>
   <div class="name-config">
     <div class="row">
-      <Preview :items="previewChars" :code="colored" label="Vorschau" />
+      <PreviewGenerator :items="previewChars" :code="colored" label="Vorschau" />
       <div class="controls">
         <label class="field">
           <span class="lbl">Farbe</span>

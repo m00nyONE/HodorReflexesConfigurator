@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import CodeGen from '@/components/CodeGen.vue'
+import CodeGenerator from '@/components/CodeGenerator.vue'
 import Inputs from '@/components/Inputs.vue'
 import NameConfigurator from '@/components/NameConfigurator.vue'
 
-// Shared state between Inputs and CodeGen
+// Shared state between Inputs and CodeGenerator
 const userName = ref('@m00nyONE')
 const customName = ref('m00ny')
 
 // Toggles can be adjusted here or wired to UI later
 const enableName = ref(true)
-const enableStatic = ref(true)
-const enableAnimated = ref(true)
+const enableStatic = ref(false)
+const enableAnimated = ref(false)
 
 // Colored name is controlled via NameConfigurator (v-model)
 const customNameColored = ref('|cFF5733m00ny|r')
@@ -29,8 +29,8 @@ const customNameColored = ref('|cFF5733m00ny|r')
       v-model="customNameColored"
     />
 
-    <!-- Pass current values to CodeGen so changes reflect immediately -->
-    <CodeGen
+    <!-- Pass current values to CodeGenerator so changes reflect immediately -->
+    <CodeGenerator
       :enable-name="enableName"
       :enable-static="enableStatic"
       :enable-animated="enableAnimated"
