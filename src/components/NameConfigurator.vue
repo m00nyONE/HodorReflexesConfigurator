@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import PreviewGenerator from '@/components/PreviewGenerator.vue'
 
 const props = defineProps<{
   userName?: string
@@ -76,26 +75,26 @@ const colored = computed(() => {
   return parts.join('')
 })
 
-// Build per-character preview colors
-const previewChars = computed(() => {
-  const name = props.customName ?? ''
-  const base = clampHex(colorHex.value)
-  const chars = Array.from(name)
-  if (!enableGradient.value || chars.length <= 1) {
-    return chars.map((ch) => ({ ch, hex: base }))
-  }
-  const alt = clampHex(colorHex2.value)
-  const [r1, g1, b1] = hexToRgb(base)
-  const [r2, g2, b2] = hexToRgb(alt)
-  return chars.map((ch, i) => {
-    const t = i / (chars.length - 1)
-    const r = r1 + (r2 - r1) * t
-    const g = g1 + (g2 - g1) * t
-    const b = b1 + (b2 - b1) * t
-    const hx = rgbToHex([r, g, b])
-    return { ch, hex: hx }
-  })
-})
+// // Build per-character preview colors
+// const previewChars = computed(() => {
+//   const name = props.customName ?? ''
+//   const base = clampHex(colorHex.value)
+//   const chars = Array.from(name)
+//   if (!enableGradient.value || chars.length <= 1) {
+//     return chars.map((ch) => ({ ch, hex: base }))
+//   }
+//   const alt = clampHex(colorHex2.value)
+//   const [r1, g1, b1] = hexToRgb(base)
+//   const [r2, g2, b2] = hexToRgb(alt)
+//   return chars.map((ch, i) => {
+//     const t = i / (chars.length - 1)
+//     const r = r1 + (r2 - r1) * t
+//     const g = g1 + (g2 - g1) * t
+//     const b = b1 + (b2 - b1) * t
+//     const hx = rgbToHex([r, g, b])
+//     return { ch, hex: hx }
+//   })
+// })
 
 // Initialize from incoming modelValue if present (one-shot)
 if (props.modelValue) {
