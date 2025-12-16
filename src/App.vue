@@ -28,6 +28,16 @@ const customNameColored = ref('|cFF5733m00ny|r')
         :custom-name="customName"
         v-model="customNameColored"
       />
+    </section>
+
+    <section class="preview-panel">
+      <RenderPreview :user-name="userName"
+                     :enable-name="enableName"
+                     :custom-name="customName"
+                     :custom-name-colored="customNameColored"
+                     :enable-static="enableStatic"
+                     :enable-animated="enableAnimated"
+      />
 
       <CodeGenerator
         :user-name="userName"
@@ -39,16 +49,6 @@ const customNameColored = ref('|cFF5733m00ny|r')
         :animationWidth=0
         :animationHeight=0
         :animationFPS=0
-      />
-    </section>
-
-    <section class="preview-panel">
-      <RenderPreview :user-name="userName"
-                     :enable-name="enableName"
-                     :custom-name="customName"
-                     :custom-name-colored="customNameColored"
-                     :enable-static="enableStatic"
-                     :enable-animated="enableAnimated"
       />
     </section>
   </div>
@@ -69,8 +69,10 @@ const customNameColored = ref('|cFF5733m00ny|r')
 .preview-panel {
   flex: 1 1 0;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+  gap: 1rem;
 }
 
 @media (min-width: 900px) {
@@ -85,7 +87,10 @@ const customNameColored = ref('|cFF5733m00ny|r')
   .preview-panel {
     min-width: 0;
     flex: 1 1 0;
-    justify-content: flex-end;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.25rem;
   }
 }
 </style>
