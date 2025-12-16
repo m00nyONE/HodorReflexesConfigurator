@@ -15,7 +15,12 @@ const emit = defineEmits<{
 // Local state for color selection (hex without leading #)
 const colorHex = ref('FF5733')
 const colorHex2 = ref('33A1FF')
-const enableGradient = ref(false)
+
+// New variable for gradient mode: 'solid' | 'gradient'
+const gradientMode = ref<'solid' | 'gradient'>('solid')
+
+// Computed property for enableGradient based on gradientMode
+const enableGradient = computed(() => gradientMode.value === 'gradient')
 
 // Proxy for color inputs (#HEX <-> HEX)
 const colorInput = computed({
@@ -107,15 +112,21 @@ watch(colored, (val) => emit('update:modelValue', val), { immediate: true })
 <template>
   <div class="name-config">
     <div class="row">
-      <PreviewGenerator :items="previewChars" :code="colored" label="Vorschau" />
       <div class="controls">
+        <div class="field">
+          <span class="lbl">Color mode</span>
+          <label style="display: flex; align-items: center; gap: 4px;">
+            <input type="radio" value="solid" v-model="gradientMode" />
+            <span>Single</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 4px;">
+            <input type="radio" value="gradient" v-model="gradientMode" />
+            <span>Gradient</span>
+          </label>
+        </div>
         <label class="field">
           <span class="lbl">Farbe</span>
           <input class="input" type="color" v-model="colorInput" />
-        </label>
-        <label class="field">
-          <span class="lbl">enable gradient</span>
-          <input type="checkbox" v-model="enableGradient" />
         </label>
         <label v-if="enableGradient" class="field">
           <span class="lbl">Farbe 2</span>
